@@ -1,0 +1,157 @@
+<!-- templates/testing/question.html -->
+{% load custom_tags %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Question</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .question-nav {
+            margin-top: 20px;
+        }
+        .question-nav a {
+            margin: 0 5px;
+            text-decoration: none;
+        }
+        .question-nav .correct {
+            color: green;
+        }
+        .question-nav .incorrect {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Question <span id="current-question">{{ current_question }}</span> of {{ total_questions }}</h1>
+    <p id="question-text">{{ question.text_ru }}</p>
+    <form id="answer-form">
+        {% csrf_token %}
+        {% for answer in answers %}
+            <div>
+                <input type="radio" id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}">
+                <label for="answer_{{ answer.id }}">{{ answer.text_ru }}</label>
+            </div>
+        {% endfor %}
+        <button type="button" id="answer-button" onclick="submitAnswer()">Answer</button>
+        <button type="button" id="skip-button" onclick="skipAnswer()">Skip</button>
+    </form>
+    <div id="result"></div>
+
+    <div class="question-nav">
+        {% for i, status in indexed_status %}
+            <a href="javascript:void(0)" onclick="navigateToQuestion({{ i }})" id="question-{{ i }}" class="{% if status == 'correct' %}correct{% elif status == 'incorrect' %}incorrect{% endif %}">{{ i|add_one }}</a>
+        {% endfor %}
+    </div>
+
+    <script>
+        function submitAnswer() {
+            let answer_id = $('input[name="answer"]:checked').val();
+            if (!answer_id) {
+                alert("Please select an answer.");
+                return;
+            }
+            $.ajax({
+                url: "{% url 'testing:ajax_answer' %}",
+                method: "POST",
+                data: {
+                    'csrfmiddlewaretoken': "{{ csrf_token }}",
+                    'answer_id': answer_id
+                },
+                success: function (data) {
+                    $("#answer-button").hide();
+                    $("#skip-button").hide();
+                    if (data.finished) {
+                        window.location.href = "{% url 'testing:results' %}";
+                    } else {
+                        updateQuestion(data);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        alert(xhr.responseJSON.error);
+                    } else {
+                        console.error(xhr);
+                    }
+                }
+            });
+        }
+
+        function skipAnswer() {
+            $.ajax({
+                url: "{% url 'testing:ajax_answer' %}",
+                method: "POST",
+                data: {
+                    'csrfmiddlewaretoken': "{{ csrf_token }}",
+                    'answer_id': ''  // отправка пустого ответа для пропуска
+                },
+                success: function (data) {
+                    $("#answer-button").hide();
+                    $("#skip-button").hide();
+                    if (data.finished) {
+                        window.location.href = "{% url 'testing:results' %}";
+                    } else {
+                        updateQuestion(data);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        alert(xhr.responseJSON.error);
+                    } else {
+                        console.error(xhr);
+                    }
+                }
+            });
+        }
+
+        function navigateToQuestion(index) {
+            $.ajax({
+                url: "{% url 'testing:navigate_question' %}",
+                method: "POST",
+                data: {
+                    'csrfmiddlewaretoken': "{{ csrf_token }}",
+                    'question_index': index
+                },
+                success: function (data) {
+                    updateQuestion(data);
+                },
+                error: function (xhr, status, error) {
+                    if (xhr.responseJSON && xhr.responseJSON.error) {
+                        alert(xhr.responseJSON.error);
+                    } else {
+                        console.error(xhr);
+                    }
+                }
+            });
+        }
+
+        function updateQuestion(data) {
+            $("#current-question").text(data.current_question);
+            $("#question-text").text(data.next_question_text);
+            $("#answer-form").empty();
+            data.next_answers.forEach(function(answer) {
+                $("#answer-form").append(
+                    `<div>
+                        <input type="radio" id="answer_${answer.id}" name="answer" value="${answer.id}">
+                        <label for="answer_${answer.id}">${answer.text_ru}</label>
+                    </div>`
+                );
+            });
+            $("#answer-form").append('<button type="button" id="answer-button" onclick="submitAnswer()">Answer</button>');
+            $("#answer-form").append('<button type="button" id="skip-button" onclick="skipAnswer()">Skip</button>');
+            $("#result").text("Correct: " + data.correct_answers + ", Incorrect: " + data.incorrect_answers);
+
+            // Update navigation
+            data.question_status.forEach(function(status, index) {
+                let questionNav = $("#question-" + index);
+                questionNav.removeClass("correct incorrect");
+                if (status == 'correct') {
+                    questionNav.addClass("correct");
+                } else if (status == 'incorrect') {
+                    questionNav.addClass("incorrect");
+                }
+            });
+        }
+    </script>
+</body>
+</html>

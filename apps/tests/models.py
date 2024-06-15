@@ -36,7 +36,7 @@ class Question(models.Model):
 
     number = models.PositiveIntegerField("Номер вопроса")
     text_ru = models.TextField("Вопрос на русском")
-    text_kg = models.TextField("Вопрос на кыргызском")
+    text_kg = models.TextField("Вопрос на кыргызском", blank=True, null=True)
     photo = models.ImageField(
         "Фото к вопросу", upload_to='tests/test', blank=True, null=True)
     theme = models.ForeignKey(
@@ -59,7 +59,7 @@ class Answer(models.Model):
     question = models.ForeignKey(
         Question, on_delete=models.CASCADE, related_name="answers", verbose_name="Вопрос")
     text_ru = models.TextField("Ответ на русском")
-    text_kg = models.TextField("Ответ на кыргызском")
+    text_kg = models.TextField("Ответ на кыргызском", blank=True, null=True)
     is_correct = models.BooleanField("Правильный ли ответ?", default=False)
 
     class Meta:
