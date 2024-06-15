@@ -4,10 +4,22 @@ from django.urls import reverse
 # Create your models here.
 
 
+class Ticket(models.Model):
+
+    number = models.PositiveIntegerField("Номер вопроса")
+
+    class Meta:
+        verbose_name = ("Билет")
+        verbose_name_plural = ("Билеты")
+
+    def __str__(self):
+        return f"Билет №{self.number}"
+
+
 class Theme(models.Model):
     text = models.CharField("Название темы", max_length=255)
-    photo = models.ImageField(upload_to='tests/theme')
-    desc = models.TextField("Описание темы")
+    photo = models.ImageField(upload_to='tests/theme', blank=True, null=True)
+    desc = models.TextField("Описание темы", blank=True, null=True)
 
     class Meta:
         verbose_name = ("Тема")
@@ -23,11 +35,14 @@ class Theme(models.Model):
 class Question(models.Model):
 
     number = models.PositiveIntegerField("Номер вопроса")
-    text_ru = models.TextField("Текст Вопроса")
-    text_kg = models.TextField("Вопросдын тексты")
-    photo = models.ImageField(upload_to='tests/test', blank=True, null=True)
+    text_ru = models.TextField("Вопрос на русском")
+    text_kg = models.TextField("Вопрос на кыргызском")
+    photo = models.ImageField(
+        "Фото к вопросу", upload_to='tests/test', blank=True, null=True)
     theme = models.ForeignKey(
         Theme, on_delete=models.CASCADE, verbose_name="Тема вопроса")
+    ticket = models.ForeignKey(
+        Ticket, on_delete=models.CASCADE, verbose_name="Билет")
 
     class Meta:
         verbose_name = ("Вопрос")
@@ -53,17 +68,3 @@ class Answer(models.Model):
 
     def __str__(self):
         return self.text_ru
-
-
-class Ticket(models.Model):
-
-    number = models.PositiveIntegerField("Номер вопроса")
-    questions = models.ManyToManyField(Question, verbose_name="Вопрос")
-
-    class Meta:
-        verbose_name = ("Билет")
-        verbose_name_plural = ("Билеты")
-
-    def __str__(self):
-        return f"Билет №{self.number}"
-
