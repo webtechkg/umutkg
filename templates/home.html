@@ -1,0 +1,21 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}Главная страница | Umut Osh{% endblock %}
+{% block main %}
+
+<h1>Темы ПДД</h1>
+<ul>
+    {% for theme in themes %}
+    <li>{{ theme.text }} <a href="{% url 'testing:start_test_theme' theme_id=theme.id %}">Начать</a></li>
+    {% endfor %}
+</ul>
+
+<h1>Билеты ПДД</h1>
+<ul>
+    {% for ticket in tickets %}
+    <li>{{ ticket.number }} <a href="{% url 'testing:start_test' ticket_id=ticket.id %}">Начать</a></li>
+    {% endfor %}
+</ul>
+
+<button onclick="location.href='{% url 'testing:start_random_test' %}'">Начать случайный тест</button>
+{% endblock %}

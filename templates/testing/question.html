@@ -1,4 +1,5 @@
 <!-- templates/testing/question.html -->
+{% load static %}
 {% load custom_tags %}
 <!DOCTYPE html>
 <html lang="en">
@@ -25,6 +26,7 @@
 <body>
     <h1>Question <span id="current-question">{{ current_question }}</span> of {{ total_questions }}</h1>
     <p id="question-text">{{ question.text_ru }}</p>
+    <img src="{% if question.photo.url %}{{question.photo.url}}{% else %}{% static 'img\no_picture.png' %}{% endif %}" alt="">
     <form id="answer-form">
         {% csrf_token %}
         {% for answer in answers %}

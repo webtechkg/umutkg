@@ -1,0 +1,16 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}Результат теста | Umut Osh{% endblock %}
+{% block main %}
+
+<h1>Темы ПДД</h1>
+<p>
+    правильные ответы {{correct_answers}}
+</p>
+<p>
+    не правильные {{incorrect_answers}}
+</p>
+<p>
+    общее количество {{total_questions}}
+</p>
+{% endblock %}
