@@ -9,4 +9,4 @@ def main(request):
     themes = Theme.objects.all()
     tickets = Ticket.objects.all()
     context = {"themes": themes, "tickets": tickets}
-    return render(request, 'home.html', context)
+    return render(request, 'main/home.html', context)
