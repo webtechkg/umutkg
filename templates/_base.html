@@ -1,20 +1,580 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Umut Osh - Автошкола Оше{% endblock title%}</title>
-    {% block link %} {% endblock %}
-</head>
-<body>
-    <div style="display: flex;justify-content: space-around;">
-        <a href="{% url 'home' %}">home</a>
-        <button onclick="location.href='{% url 'testing:start_random_test' %}'">Начать случайный тест</button>
 
+<head>
+    <!-- Meta Data -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}Umut Osh - Автошкола Оше{% endblock title%}</title>
+    {% block link %}
+    {% endblock %}
+
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'media/favicon.png'%}">
+
+    <!-- Dependency Styles -->
+    <link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'libs/feather-font/css/iconfont.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'libs/icomoon-font/css/icomoon.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'libs/font-awesome/css/font-awesome.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'libs/wpbingofont/css/wpbingofont.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'libs/elegant-icons/css/elegant.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'libs/slick/css/slick.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'libs/slick/css/slick-theme.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'libs/mmenu/css/mmenu.min.css'%}" type="text/css">
+
+    <!-- Site Stylesheet -->
+    <link rel="stylesheet" href="{% static 'assets/css/app.css'%}" type="text/css">
+    <link rel="stylesheet" href="{% static 'assets/css/responsive.css'%}" type="text/css">
+
+    <!-- Google Web Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@100;200;300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css?family=EB+Garamond:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic&display=swap"
+        rel="stylesheet">
+</head>
+
+<body class="home home-3 title-3">
+    <div id="page" class="hfeed page-wrapper">
+        <header id="site-header" class="site-header header-v3">
+            <div class="header-mobile">
+                <div class="section-padding">
+                    <div class="section-container">
+                        <div class="row">
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3 header-left">
+                                <div class="navbar-header">
+                                    <button type="button" id="show-megamenu" class="navbar-toggle"></button>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-6 header-center">
+                                <div class="site-logo">
+                                    <a href="index3.html">
+                                        <img width="400" height="79" src="{% static 'media/logo.png'%}"
+                                            alt="Ruper – Furniture HTML Theme" />
+                                    </a>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="header-mobile-fixed">
+                    <!-- Shop -->
+                    <div class="shop-page">
+                        <a href="shop-grid-left.html"><i class="wpb-icon-shop"></i></a>
+                    </div>
+
+                    <!-- Login -->
+                    <div class="my-account">
+                        <div class="login-header">
+                            <a href="page-my-account.html"><i class="wpb-icon-user"></i></a>
+                        </div>
+                    </div>
+
+                    <!-- Search -->
+                    <div class="search-box">
+                        <div class="search-toggle"><i class="wpb-icon-magnifying-glass"></i></div>
+                    </div>
+
+                    <!-- Wishlist -->
+                    <div class="wishlist-box">
+                        <a href="shop-wishlist.html"><i class="wpb-icon-heart"></i></a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-desktop">
+                <div class="header-wrapper">
+                    <div class="section-padding">
+                        <div class="section-container p-l-r">
+                            <div class="row">
+                                <div class="col-lg-8 header-left">
+                                    <div class="site-logo">
+                                        <a href="index3.html">
+                                            <img width="400" height="79" src="{% static 'media/logo.png'%}"
+                                                alt="Ruper – Furniture HTML Theme" />
+                                        </a>
+                                    </div>
+
+                                    <div class="site-navigation">
+                                        <nav id="main-navigation">
+                                            <ul id="menu-main-menu" class="menu">
+                                                <li
+                                                    class="level-0 menu-item menu-item-has-children mega-menu current-menu-item">
+                                                    <a href="index.html"><span class="menu-item-text">Home</span></a>
+                                                    <div class="sub-menu">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <div class="menu-section">
+                                                                    <h2 class="sub-menu-title">Furniture 1</h2>
+                                                                    <ul class="menu-list">
+                                                                        <li>
+                                                                            <a href="index.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Categories</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index2.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Clean</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index3.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Collection</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index4.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Grid</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index5.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Minimal</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index6.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Modern</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index7.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Stylish</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index8.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Unique</span></a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="menu-section">
+                                                                    <h2 class="sub-menu-title">Furniture 2</h2>
+                                                                    <ul class="menu-list">
+                                                                        <li>
+                                                                            <a href="index9.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Split</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index10.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Gothic</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index11.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Luxury</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index12.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Scandinavian</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index13.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Mid-Century</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index14.html"><span
+                                                                                    class="menu-item-text">Home
+                                                                                    Retro</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="index15.html"><span
+                                                                                    class="menu-item-text">Home Color
+                                                                                    Block</span></a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="level-0 menu-item menu-item-has-children">
+                                                    <a href="shop-grid-left.html"><span
+                                                            class="menu-item-text">Shop</span></a>
+                                                    <ul class="sub-menu">
+                                                        <li class="level-1 menu-item menu-item-has-children">
+                                                            <a href="shop-grid-left.html"><span
+                                                                    class="menu-item-text">Shop - Products</span></a>
+                                                            <ul class="sub-menu">
+                                                                <li>
+                                                                    <a href="shop-grid-left.html"><span
+                                                                            class="menu-item-text">Shop Grid - Left
+                                                                            Sidebar</span></a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="shop-list-left.html"><span
+                                                                            class="menu-item-text">Shop List - Left
+                                                                            Sidebar</span></a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="shop-grid-right.html"><span
+                                                                            class="menu-item-text">Shop Grid - Right
+                                                                            Sidebar</span></a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="shop-list-right.html"><span
+                                                                            class="menu-item-text">Shop List - Right
+                                                                            Sidebar</span></a>
+                                                                </li>
+                                                                <li>
+                                                                    <a href="shop-grid-fullwidth.html"><span
+                                                                            class="menu-item-text">Shop Grid - No
+                                                                            Sidebar</span></a>
+                                                                </li>
+                                                            </ul>
+                                                        </li>
+                                                        <li>
+                                                            <a href="shop-details.html"><span
+                                                                    class="menu-item-text">Shop Details</span></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="shop-cart.html"><span class="menu-item-text">Shop -
+                                                                    Cart</span></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="shop-checkout.html"><span
+                                                                    class="menu-item-text">Shop - Checkout</span></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="shop-wishlist.html"><span
+                                                                    class="menu-item-text">Shop - Wishlist</span></a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li
+                                                    class="level-0 menu-item menu-item-has-children mega-menu mega-menu-fullwidth align-center">
+                                                    <a href="blog-grid-left.html"><span
+                                                            class="menu-item-text">Blog</span></a>
+                                                    <div class="sub-menu">
+                                                        <div class="row">
+                                                            <div class="col-md-5">
+                                                                <div class="menu-section">
+                                                                    <h2 class="sub-menu-title">Blog Category</h2>
+                                                                    <ul class="menu-list">
+                                                                        <li>
+                                                                            <a href="blog-grid-left.html"><span
+                                                                                    class="menu-item-text">Blog Grid -
+                                                                                    Left Sidebar</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="blog-grid-right.html"><span
+                                                                                    class="menu-item-text">Blog Grid -
+                                                                                    Right Sidebar</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="blog-list-left.html"><span
+                                                                                    class="menu-item-text">Blog List -
+                                                                                    Left Sidebar</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="blog-list-right.html"><span
+                                                                                    class="menu-item-text">Blog List -
+                                                                                    Right Sidebar</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="blog-grid-fullwidth.html"><span
+                                                                                    class="menu-item-text">Blog Grid -
+                                                                                    No Sidebar</span></a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+
+                                                                <div class="menu-section">
+                                                                    <h2 class="sub-menu-title">Blog Details</h2>
+                                                                    <ul class="menu-list">
+                                                                        <li>
+                                                                            <a href="blog-details-left.html"><span
+                                                                                    class="menu-item-text">Blog Details
+                                                                                    - Left Sidebar</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="blog-details-right.html"><span
+                                                                                    class="menu-item-text">Blog Details
+                                                                                    - Right Sidebar</span></a>
+                                                                        </li>
+                                                                        <li>
+                                                                            <a href="blog-details-fullwidth.html"><span
+                                                                                    class="menu-item-text">Blog Details
+                                                                                    - No Sidebar</span></a>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-7">
+                                                                <div class="menu-section">
+                                                                    <h2 class="sub-menu-title">Recent Posts</h2>
+                                                                    <div class="block block-posts recent-posts p-t-5">
+                                                                        <ul class="posts-list">
+                                                                            <li class="post-item">
+                                                                                <a href="blog-details-right.html"
+                                                                                    class="post-image">
+                                                                                    <img
+                                                                                        src="{% static 'media/blog/1.jpg'%}">
+                                                                                </a>
+                                                                                <div class="post-content">
+                                                                                    <h2 class="post-title">
+                                                                                        <a
+                                                                                            href="blog-details-right.html">
+                                                                                            Easy Fixes For Home Decor
+                                                                                        </a>
+                                                                                    </h2>
+                                                                                    <div class="post-time">
+                                                                                        <span class="post-date">May 30,
+                                                                                            2022</span>
+                                                                                        <span class="post-comment">4
+                                                                                            Comments</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="post-item">
+                                                                                <a href="blog-details-right.html"
+                                                                                    class="post-image">
+                                                                                    <img
+                                                                                        src="{% static 'media/blog/2.jpg'%}">
+                                                                                </a>
+                                                                                <div class="post-content">
+                                                                                    <h2 class="post-title">
+                                                                                        <a
+                                                                                            href="blog-details-right.html">
+                                                                                            How To Make Your Home A
+                                                                                            Showplace
+                                                                                        </a>
+                                                                                    </h2>
+                                                                                    <div class="post-time">
+                                                                                        <span class="post-date">Aug 24,
+                                                                                            2022</span>
+                                                                                        <span class="post-comment">2
+                                                                                            Comments</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="post-item">
+                                                                                <a href="blog-details-right.html"
+                                                                                    class="post-image">
+                                                                                    <img
+                                                                                        src="{% static 'media/blog/3.jpg'%}">
+                                                                                </a>
+                                                                                <div class="post-content">
+                                                                                    <h2 class="post-title">
+                                                                                        <a
+                                                                                            href="blog-details-right.html">
+                                                                                            Stunning Furniture With
+                                                                                            Aesthetic Appeal
+                                                                                        </a>
+                                                                                    </h2>
+                                                                                    <div class="post-time">
+                                                                                        <span class="post-date">Dec 06,
+                                                                                            2022</span>
+                                                                                        <span class="post-comment">1
+                                                                                            Comment</span>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                <li class="level-0 menu-item menu-item-has-children">
+                                                    <a href="#"><span class="menu-item-text">Pages</span></a>
+                                                    <ul class="sub-menu">
+                                                        <li>
+                                                            <a href="page-login.html"><span class="menu-item-text">Login
+                                                                    / Register</span></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="page-forgot-password.html"><span
+                                                                    class="menu-item-text">Forgot Password</span></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="page-my-account.html"><span
+                                                                    class="menu-item-text">My Account</span></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="page-about.html"><span class="menu-item-text">About
+                                                                    Us</span></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="page-contact.html"><span
+                                                                    class="menu-item-text">Contact</span></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="page-faq.html"><span
+                                                                    class="menu-item-text">FAQ</span></a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="page-404.html"><span class="menu-item-text">Page
+                                                                    404</span></a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="level-0 menu-item">
+                                                    <a href="page-contact.html"><span
+                                                            class="menu-item-text">Contact</span></a>
+                                                </li>
+                                            </ul>
+                                        </nav>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        {% block main %}
+
+        {% endblock main %}
+        <footer id="site-footer" class="site-footer background">
+            <div class="footer">
+                <div class="section-padding">
+                    <div class="section-container">
+                        <div class="block-widget-wrap">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="block block-menu m-b-20">
+                                        <h2 class="block-title">Contact Us</h2>
+                                        <div class="block-content">
+                                            <ul>
+                                                <li>
+                                                    <a href="page-contact.html">616.774.0561</a>
+                                                </li>
+                                                <li>
+                                                    <a href="page-contact.html">866.453.4748</a>
+                                                </li>
+                                                <li>
+                                                    <a href="page-contact.html">HR Fax: 810.222.5439</a>
+                                                </li>
+                                                <li>
+                                                    <a href="page-contact.html">sales@ruperfurniture.com</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="block block-social">
+                                        <ul class="social-link">
+                                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-dribbble"></i></a></li>
+                                            <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="block block-menu">
+                                        <h2 class="block-title">Showroom</h2>
+                                        <div class="block-content">
+                                            <p>1000 84th Street SW , Byron Center, MI 49315</p>
+                                            <p>AmericasMart Bldg. #1</p>
+                                            <p>Suite 5C-1, Atlanta, GA 30303</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="block block-menu">
+                                        <h2 class="block-title">Services</h2>
+                                        <div class="block-content">
+                                            <ul>
+                                                <li>
+                                                    <a href="page-about.html">Sale</a>
+                                                </li>
+                                                <li>
+                                                    <a href="page-about.html">Quick Ship</a>
+                                                </li>
+                                                <li>
+                                                    <a href="page-about.html">New Designs</a>
+                                                </li>
+                                                <li>
+                                                    <a href="page-about.html">Accidental Fabric Protection</a>
+                                                </li>
+                                                <li>
+                                                    <a href="page-about.html">Furniture Care</a>
+                                                </li>
+                                                <li>
+                                                    <a href="page-about.html">Gift Cards</a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-3 col-md-6">
+                                    <div class="block block-newsletter">
+                                        <h2 class="block-title">Newsletter</h2>
+                                        <div class="block-content">
+                                            <div class="newsletter-text">Enter your email below to be the first to know
+                                                about new collections and product launches.</div>
+                                            <form action="" method="post" class="newsletter-form">
+                                                <input type="email" class="bg-white" name="your-email" value=""
+                                                    size="40" placeholder="Email address">
+                                                <span class="btn-submit">
+                                                    <input type="submit" value="Subscribe">
+                                                </span>
+                                            </form>
+                                        </div>
+                                    </div>
+                                    <div class="block block-image">
+                                        <img width="309" height="32" src="media/payments.png" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="section-padding">
+                    <div class="section-container">
+                        <div class="block-widget-wrap">
+                            <p class="copyright text-center">WebtechBandKG © 2024. All Right Reserved</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
     </div>
-    {% block main %}
-    
-	{% endblock main %}
+
+    <!-- Back Top button -->
+    <div class="back-top button-show">
+        <i class="arrow_carrot-up"></i>
+    </div>
+
+
+    <!-- Page Loader -->
+    <div class="page-preloader">
+        <div class="loader">
+            <div></div>
+            <div></div>
+        </div>
+    </div>
+
+    <!-- Dependency Scripts -->
+    <script src="{% static 'libs/popper/js/popper.min.js'%}"></script>
+    <script src="{% static 'libs/jquery/js/jquery.min.js'%}"></script>
+    <script src="{% static 'libs/bootstrap/js/bootstrap.min.js'%}"></script>
+    <script src="{% static 'libs/slick/js/slick.min.js'%}"></script>
+    <script src="{% static 'libs/countdown/js/jquery.countdown.min.js'%}"></script>
+    <script src="{% static 'libs/mmenu/js/jquery.mmenu.all.min.js'%}"></script>
+
+    <!-- Site Scripts -->
+    <script src="{% static 'assets/js/app.js'%}"></script>
 </body>
+
 </html>
