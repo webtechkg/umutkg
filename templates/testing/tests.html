@@ -1,0 +1,194 @@
+{% extends "_base.html" %}
+{% load static %}
+{% block title %}Тесты | Umut Osh{% endblock %}
+{% block main %}
+<style>
+    .block-content-tests {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+  
+    .block-content-tests li {
+      list-style: none;
+      width: 60px; /* Ширина квадрата */
+      height: 60px; /* Высота квадрата */
+      margin: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid rgba(128, 128, 128, 0.5); /* Обводка серым цветом с прозрачностью */
+      box-sizing: border-box;
+      text-align: center;
+    }
+  
+    .block-content-tests a {
+      text-decoration: none;
+      color: #000;
+    }
+  
+    .block-content-tests {
+      max-width: calc(60px * 15 + 10px * 14); /* Ширина строки из 15 элементов */
+      margin: 0 auto; /* Центрирование по горизонтали */
+    }
+  </style>
+
+<section class="section section-padding top-border p-t-70 m-b-70">
+    <div class="section-container">
+        <!-- Block Product Categories -->
+        <div class="block block-product-cats slider">
+            <div class="block-widget-wrap">
+                <div class="block-title">
+                    <h2>Все тесты</h2>
+                </div>
+                <div class="block-content-tests">
+                    {% for ticket in tickets %}
+                    <li><a href="{% url 'start_test' ticket_id=ticket.id %}">{{ ticket.number }}</a></li>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+<section class="section section-padding m-b-70">
+    <div class="section-container">
+        <!-- Block Banners (Layout 4) -->
+        <div class="block block-banners layout-4 banners-effect">
+            <div class="block-widget-wrap">
+                <div class="row">
+                    <div class="col-md-4 sm-m-b-50">
+                        <div class="block-widget-banner layout-5">
+                            <div class="bg-banner">
+                                <div class="banner-wrapper banners">
+                                    <div class="banner-image">
+                                        <a href="shop-grid-left.html">
+                                            <img width="496" height="577"
+                                                src="{% static 'media/banner/banner-6.jpg'%}"
+                                                alt="Banner Image">
+                                        </a>
+                                    </div>
+                                    <div class="banner-wrapper-infor">
+                                        <div class="info">
+                                            <div class="content">
+                                                <a class="link-title" href="shop-grid-left.html">
+                                                    <h3 class="title-banner">Тесты ПДД</h3>
+                                                </a>
+                                                <div class="banner-image-description">
+                                                    Подготовтесь к экзамену ПДД с нами
+                                                </div>
+                                                <!-- <a class="button btn-underline"
+                                                    href="shop-grid-left.html">SHOP NOW</a> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4 sm-m-b-50">
+                        <div class="block-widget-banner layout-5">
+                            <div class="bg-banner">
+                                <div class="banner-wrapper banners">
+                                    <div class="banner-image">
+                                        <a href="{% url 'start_random_test' %}">
+                                            <img width="496" height="577"
+                                                src="{% static 'media/banner/banner-7.jpg'%}"
+                                                alt="Banner Image">
+                                        </a>
+                                    </div>
+                                    <div class="banner-wrapper-infor text-center">
+                                        <div class="info">
+                                            <div class="content">
+                                                <a class="link-title" href="{% url 'start_random_test' %}">
+                                                    <h3 class="title-banner">Экзамен ПДД</h3>
+                                                </a>
+                                                <div class="banner-image-description">
+                                                    Проверьте свои знания на реальном экзамене ПДД
+                                                </div>
+                                                <!-- <a class="button btn-underline center"
+                                                    href="{% url 'start_random_test' %}">SHOP NOW</a> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="block-widget-banner layout-5">
+                            <div class="bg-banner">
+                                <div class="banner-wrapper banners">
+                                    <div class="banner-image">
+                                        <a href="shop-grid-left.html">
+                                            <img width="496" height="577"
+                                                src="{% static 'media/banner/banner-8.jpg'%}"
+                                                alt="Banner Image">
+                                        </a>
+                                    </div>
+                                    <div class="banner-wrapper-infor">
+                                        <div class="info">
+                                            <div class="content">
+                                                <a class="link-title" href="shop-grid-left.html">
+                                                    <h3 class="title-banner">Знаки ПДД</h3>
+                                                </a>
+                                                <div class="banner-image-description">
+                                                    Изучите знаки ПДД чтобы быть уверенным на
+                                                </div>
+                                                <!-- <a class="button btn-underline"
+                                                    href="shop-grid-left.html">SHOP NOW</a> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section section-padding top-border p-t-70 m-b-70">
+    <div class="section-container">
+        <!-- Block Product Categories -->
+        <div class="block block-product-cats slider">
+            <div class="block-widget-wrap">
+                <div class="block-title">
+                    <h2>Темы</h2>
+                </div>
+                <div class="block-content">
+                    <div class="product-cats-list slick-wrap">
+                        <div class="slick-sliders content-category" data-dots="0" data-slidestoscroll="true"
+                            data-nav="1" data-columns4="2" data-columns3="3" data-columns2="4" data-columns1="5"
+                            data-columns1440="5" data-columns="5">
+                            {% for theme in themes %}
+                            <div class="item item-product-cat slick-slide">
+                                <div class="item-product-cat-content">
+                                    <a href="{% url 'start_test_theme' theme_id=theme.id %}">
+                                        <div class="item-image">
+                                            <img width="258" height="258" src="{% static 'media/product/cat-1.jpg'%}"
+                                                alt="bed-bath">
+                                        </div>
+                                    </a>
+                                    <div class="product-cat-content-info">
+                                        <h2 class="item-title">
+                                            <a href="{% url 'start_test_theme' theme_id=theme.id %}">
+                                                {{ theme.text}}</a>
+                                        </h2>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock %}
