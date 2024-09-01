@@ -1,159 +1,242 @@
 <!-- templates/testing/question.html -->
+{% extends "_base.html" %}
 {% load static %}
 {% load custom_tags %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Question</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .question-nav {
-            margin-top: 20px;
-        }
-        .question-nav a {
-            margin: 0 5px;
-            text-decoration: none;
-        }
-        .question-nav .correct {
-            color: green;
-        }
-        .question-nav .incorrect {
-            color: red;
-        }
-    </style>
-</head>
-<body>
-    <h1>Question <span id="current-question">{{ current_question }}</span> of {{ total_questions }}</h1>
-    <p id="question-text">{{ question.text_ru }}</p>
-    <img src="{% if question.photo.url %}{{question.photo.url}}{% else %}{% static 'img\no_picture.png' %}{% endif %}" alt="">
-    <form id="answer-form">
-        {% csrf_token %}
-        {% for answer in answers %}
-            <div>
-                <input type="radio" id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}">
-                <label for="answer_{{ answer.id }}">{{ answer.text_ru }}</label>
+{% block title %}Вопрос № {{ current_question }} {% endblock %}
+{% block link %}
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+{% endblock %}
+{% block main %}
+
+<style>
+    .question-nav {
+        margin-top: 20px;
+    }
+
+    .question-nav a {
+        margin: 0 5px;
+        text-decoration: none;
+    }
+
+    .question-nav .correct {
+        color: green;
+    }
+
+    .question-nav .incorrect {
+        color: red;
+    }
+
+
+    .question-nav {
+        margin-top: 20px;
+    }
+
+    .question-nav a {
+        margin: 0 5px;
+        text-decoration: none;
+    }
+
+    .question-nav .correct {
+        color: green;
+    }
+
+    .question-nav .incorrect {
+        color: red;
+    }
+
+    img {
+        display: block;
+        margin: 0 auto;
+        /* Центрирование изображения */
+    }
+
+    .row {
+        display: flex;
+        justify-content: flex-start;
+        /* Текст будет статично слева */
+        align-items: center;
+        /* Центрирование по вертикали, если нужно */
+    }
+
+    .col-lg-6:first-child {
+        display: flex;
+        justify-content: center;
+        /* Центрирование изображения по горизонтали */
+        align-items: center;
+        /* Центрирование изображения по горизонтали */
+
+    }
+</style>
+
+
+<section class="section background-2 no-space m-b-70" style="padding-top: 70px;">
+    <div class="row">
+        <div class="col-lg-6">
+            <!-- Block Banners -->
+            <div class="block block-banners banners-effect">
+                <div class="block-widget-banner">
+                    <div class="bg-banner">
+                        <div class="banner-wrapper banners">
+                            <div class="banner-image">
+                                <a href="#">
+                                    <img width="961" height="50%"
+                                        src="{% if question.photo %}{{question.photo.url}}{% else %}{% static 'img\no_picture.png' %}{% endif %}"
+                                        alt="Banner Image">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-        {% endfor %}
-        <button type="button" id="answer-button" onclick="submitAnswer()">Answer</button>
-        <button type="button" id="skip-button" onclick="skipAnswer()">Skip</button>
-    </form>
-    <div id="result"></div>
-
-    <div class="question-nav">
-        {% for i, status in indexed_status %}
-            <a href="javascript:void(0)" onclick="navigateToQuestion({{ i }})" id="question-{{ i }}" class="{% if status == 'correct' %}correct{% elif status == 'incorrect' %}incorrect{% endif %}">{{ i|add_one }}</a>
-        {% endfor %}
+        </div>
+        <div class="col-lg-6">
+            <!-- Block Newsletter -->
+            <div class="block block-newsletter ">
+                <div class="newsletter-wrap" style="margin: 20px;">
+                    <div class="sub-title">Вопрос <span id="current-question">
+                            {{ current_question }}</span> из {{ total_questions }}</div>
+                    <div class="title">{{ question.text_ru }}</div>
+                    <form id="answer-form">
+                        {% csrf_token %}
+                        {% for answer in answers %}
+                        <div>
+                            <label for="answer_{{ answer.id }}"><input style="margin-right: 7px;" type="radio"
+                                    id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}">
+                                {{answer.text_ru}}</label>
+                        </div>
+                        {% endfor %}
+                        <button class="answer-button" type="button" id="answer-button"
+                            onclick="submitAnswer()">ответить</button>
+                        <button></button>
+                    </form>
+                    <div id="result"></div>
+                    <div class="question-nav">
+                        {% for i, status in indexed_status %}
+                        <a href="javascript:void(0)" onclick="navigateToQuestion({{ i }})" id="question-{{ i }}"
+                            class="{% if status == 'correct' %}correct{% elif status == 'incorrect' %}incorrect{% endif %}">
+                            {{ i|add_one }}</a>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    </div>
+</section>
 
-    <script>
-        function submitAnswer() {
-            let answer_id = $('input[name="answer"]:checked').val();
-            if (!answer_id) {
-                alert("Please select an answer.");
-                return;
-            }
-            $.ajax({
-                url: "{% url 'testing:ajax_answer' %}",
-                method: "POST",
-                data: {
-                    'csrfmiddlewaretoken': "{{ csrf_token }}",
-                    'answer_id': answer_id
-                },
-                success: function (data) {
-                    $("#answer-button").hide();
-                    $("#skip-button").hide();
-                    if (data.finished) {
-                        window.location.href = "{% url 'testing:results' %}";
-                    } else {
-                        updateQuestion(data);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    if (xhr.responseJSON && xhr.responseJSON.error) {
-                        alert(xhr.responseJSON.error);
-                    } else {
-                        console.error(xhr);
-                    }
-                }
-            });
+<script>
+    function submitAnswer() {
+        let answer_id = $('input[name="answer"]:checked').val();
+        if (!answer_id) {
+            alert("Пожалуйста, выберите ответ.");
+            return;
         }
+        $.ajax({
+            url: "{% url 'ajax_answer' %}",
+            method: "POST",
+            data: {
+                'csrfmiddlewaretoken': "{{ csrf_token }}",
+                'answer_id': answer_id
+            },
+            success: function (data) {
+                $("#answer-button").hide();
+                if (data.finished) {
+                    // Показываем обновленные результаты
+                    $("#result").html(`Тест завершен. Правильных ответов: ${data.correct_answers} из ${data.total_questions}`);
 
-        function skipAnswer() {
-            $.ajax({
-                url: "{% url 'testing:ajax_answer' %}",
-                method: "POST",
-                data: {
-                    'csrfmiddlewaretoken': "{{ csrf_token }}",
-                    'answer_id': ''  // отправка пустого ответа для пропуска
-                },
-                success: function (data) {
-                    $("#answer-button").hide();
-                    $("#skip-button").hide();
-                    if (data.finished) {
-                        window.location.href = "{% url 'testing:results' %}";
-                    } else {
-                        updateQuestion(data);
-                    }
-                },
-                error: function (xhr, status, error) {
-                    if (xhr.responseJSON && xhr.responseJSON.error) {
-                        alert(xhr.responseJSON.error);
-                    } else {
-                        console.error(xhr);
-                    }
-                }
-            });
-        }
+                    // Обновляем статус вопросов
+                    data.question_status.forEach(function (status, index) {
+                        let questionNav = $("#question-" + index);
+                        questionNav.removeClass("correct incorrect");
+                        if (status == 'correct') {
+                            questionNav.addClass("correct");
+                        } else if (status == 'incorrect') {
+                            questionNav.addClass("incorrect");
+                        }
+                    });
 
-        function navigateToQuestion(index) {
-            $.ajax({
-                url: "{% url 'testing:navigate_question' %}",
-                method: "POST",
-                data: {
-                    'csrfmiddlewaretoken': "{{ csrf_token }}",
-                    'question_index': index
-                },
-                success: function (data) {
+                } else {
                     updateQuestion(data);
-                },
-                error: function (xhr, status, error) {
-                    if (xhr.responseJSON && xhr.responseJSON.error) {
-                        alert(xhr.responseJSON.error);
-                    } else {
-                        console.error(xhr);
-                    }
                 }
-            });
-        }
+            },
+            error: function (xhr, status, error) {
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    alert(xhr.responseJSON.error);
+                } else {
+                    console.error(xhr);
+                }
+            }
+        });
+    }
 
-        function updateQuestion(data) {
-            $("#current-question").text(data.current_question);
-            $("#question-text").text(data.next_question_text);
+
+    function navigateToQuestion(index) {
+        $.ajax({
+            url: "{% url 'navigate_question' %}",
+            method: "POST",
+            data: {
+                'csrfmiddlewaretoken': "{{ csrf_token }}",
+                'question_index': index
+            },
+            success: function (data) {
+                updateQuestion(data);
+            },
+            error: function (xhr, status, error) {
+                if (xhr.responseJSON && xhr.responseJSON.error) {
+                    alert(xhr.responseJSON.error);
+                } else {
+                    console.error(xhr);
+                }
+            }
+        });
+    }
+
+    function updateQuestion(data) {
+        if (data.finished) {
+            $("#answer-button").hide();
+
+        } else {
+            $("#current-question").text(data.current_question); // Обновляем номер вопроса
+            $("#question-text").text(data.next_question_text);  // Обновляем текст вопроса
+
+            // Обновляем фото с добавлением временной метки
+            let photoUrl = data.next_question_photo ? data.next_question_photo + '?v=' + new Date().getTime() : "{% static 'img/no_picture.png' %}";
+            $(".banner-image img").attr("src", photoUrl); // Изменяем URL изображения
+
+            // Очищаем старые ответы и добавляем новые
             $("#answer-form").empty();
-            data.next_answers.forEach(function(answer) {
+            data.next_answers.forEach(function (answer) {
                 $("#answer-form").append(
                     `<div>
-                        <input type="radio" id="answer_${answer.id}" name="answer" value="${answer.id}">
-                        <label for="answer_${answer.id}">${answer.text_ru}</label>
-                    </div>`
+            <label for="answer_${answer.id}">
+                <input type="radio" id="answer_${answer.id}" name="answer" value="${answer.id}" style="margin-right: 7px;">
+                ${answer.text_ru}
+            </label>
+        </div>`
                 );
             });
-            $("#answer-form").append('<button type="button" id="answer-button" onclick="submitAnswer()">Answer</button>');
-            $("#answer-form").append('<button type="button" id="skip-button" onclick="skipAnswer()">Skip</button>');
-            $("#result").text("Correct: " + data.correct_answers + ", Incorrect: " + data.incorrect_answers);
-
-            // Update navigation
-            data.question_status.forEach(function(status, index) {
-                let questionNav = $("#question-" + index);
-                questionNav.removeClass("correct incorrect");
-                if (status == 'correct') {
-                    questionNav.addClass("correct");
-                } else if (status == 'incorrect') {
-                    questionNav.addClass("incorrect");
-                }
-            });
         }
-    </script>
-</body>
-</html>
+
+
+        // Добавляем кнопки для ответа
+        $("#answer-form").append('<button type="button" id="answer-button" onclick="submitAnswer()">ответить</button>');
+
+        // Обновляем результаты
+        $("#result").text("Правильно: " + data.correct_answers + ", Неправильно: " + data.incorrect_answers);
+
+        // Обновляем навигацию по вопросам
+        data.question_status.forEach(function (status, index) {
+            let questionNav = $("#question-" + index);
+            questionNav.removeClass("correct incorrect");
+            if (status == 'correct') {
+                questionNav.addClass("correct");
+            } else if (status == 'incorrect') {
+                questionNav.addClass("incorrect");
+            }
+        });
+    }
+
+</script>
+
+{% endblock %}

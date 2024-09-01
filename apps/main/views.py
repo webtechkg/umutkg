@@ -10,3 +10,7 @@ def main(request):
     tickets = Ticket.objects.all()
     context = {"themes": themes, "tickets": tickets}
     return render(request, 'main/home.html', context)
+
+
+def contact(request):
+    return render(request, 'main/page-contact.html')

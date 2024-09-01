@@ -2,7 +2,6 @@
 from django.urls import path
 from . import views
 
-app_name = 'testing'
 urlpatterns = [
     path('', views.list_themes_and_tickets_view, name='list_themes_and_tickets'),
     path('start_random/', views.start_random_test_view, name='start_random_test'),

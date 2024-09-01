@@ -24,14 +24,14 @@ def start_test_view(request, ticket_id=None, theme_id=None):
     request.session["question_status"] = [""] * len(questions)
     request.session["answered_questions"] = []
 
-    return redirect("testing:question")
+    return redirect("question")
 
 
 def question_view(request):
     questions = request.session.get("questions", [])
     current_question = request.session.get("current_question", 0)
-    if current_question >= len(questions):
-        return redirect("testing:results")
+    # if current_question >= len(questions):
+    #     return redirect("results")
 
     question_id = questions[current_question]
     question, answers = get_question_with_answers(question_id)
@@ -67,6 +67,7 @@ def ajax_answer(request):
         answer_id = request.POST.get("answer_id", "")
         is_correct, correct_answer = process_answer(question_id, answer_id)
 
+        # Обновляем статус вопроса
         if is_correct:
             request.session["correct_answers"] += 1
             request.session["question_status"][current_question] = "correct"
@@ -79,12 +80,21 @@ def ajax_answer(request):
         request.session["current_question"] += 1
         next_question_index = request.session["current_question"]
 
+        # Проверка на завершение теста
         if next_question_index >= len(questions):
-            return JsonResponse({"finished": True})
+            # Возвращаем итоговые данные после завершения теста
+            return JsonResponse({
+                "finished": True,
+                "correct_answers": request.session["correct_answers"],
+                "incorrect_answers": request.session["incorrect_answers"],
+                "total_questions": len(questions),
+                "question_status": request.session["question_status"],  # Добавляем статусы вопросов для обновления
+            })
 
         next_question_id = questions[next_question_index]
         next_question, next_answers = get_question_with_answers(next_question_id)
 
+        next_question_photo = next_question.photo.url if next_question.photo else None
         data = {
             "is_correct": is_correct,
             "correct_answers": request.session["correct_answers"],
@@ -94,13 +104,14 @@ def ajax_answer(request):
             "finished": False,
             "next_question_text": next_question.text_ru,
             "next_question_id": next_question.id,
+            "next_question_photo": next_question_photo,  # Передаем URL фотографии
             "next_answers": list(next_answers.values("id", "text_ru")),
             "correct_answer": correct_answer,
-            "question_status": request.session["question_status"],
+            "question_status": request.session["question_status"],  # Добавляем статусы вопросов для обновления
         }
+
         return JsonResponse(data)
     return JsonResponse({"error": "Invalid request"}, status=400)
-
 
 def navigate_question(request):
     if request.method == "POST":
@@ -115,15 +126,18 @@ def navigate_question(request):
         question_status = request.session.get("question_status", [])
         indexed_status = list(enumerate(question_status))
 
+        next_question_photo = question.photo.url if question.photo else None
         data = {
             "current_question": question_index + 1,
             "next_question_text": question.text_ru,
             "next_question_id": question.id,
+            "next_question_photo": next_question_photo,  # Передаем URL фотографии
             "next_answers": list(answers.values("id", "text_ru")),
             "correct_answers": request.session["correct_answers"],
             "incorrect_answers": request.session["incorrect_answers"],
             "question_status": indexed_status,
         }
+
         return JsonResponse(data)
     return JsonResponse({"error": "Invalid request"}, status=400)
 
@@ -148,7 +162,7 @@ def list_themes_and_tickets_view(request):
     tickets = Ticket.objects.all()
     return render(
         request,
-        "testing/themes_and_tickets.html",
+        "testing/tests.html",
         {"themes": themes, "tickets": tickets},
     )
 
@@ -158,7 +172,7 @@ def start_random_test_view(request):
     tickets = list(Ticket.objects.all())
     if random.choice([True, False]):
         random_ticket = random.choice(tickets)
-        return redirect("testing:start_test", ticket_id=random_ticket.id)
+        return redirect("start_test", ticket_id=random_ticket.id)
     else:
         random_theme = random.choice(themes)
-        return redirect("testing:start_test_theme", theme_id=random_theme.id)
+        return redirect("start_test_theme", theme_id=random_theme.id)
