@@ -569,7 +569,7 @@
     color: #fff;
     text-transform: uppercase;
     font-size: 13px;
-    font-family: Barlow Semi Condensed;
+    font-family: "Jost", sans-serif;
   }
   .site-mobile-navigation .remove-megamenu:after, 
   .site-mobile-vertical .remove-megamenu:after {
@@ -769,7 +769,7 @@
     text-transform: uppercase;
     color: #fff;
     font-size: 13px;
-    font-family: Barlow Semi Condensed;
+    font-family: "Jost", sans-serif;
   }
   .site-mobile-vertical .remove-verticalmenu:after {
     content: "\4d";
