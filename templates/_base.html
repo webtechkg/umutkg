@@ -13,7 +13,7 @@
 
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{% static 'media/favicon.png'%}">
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'img/logo.jpg' %}">
 
     <!-- Dependency Styles -->
     <link rel="stylesheet" href="{% static 'libs/bootstrap/css/bootstrap.min.css'%}" type="text/css">
@@ -54,7 +54,7 @@
                             <div class="col-xl-4 col-lg-4 col-md-4 col-sm-6 col-6 header-center">
                                 <div class="site-logo">
                                     <a href="{% url 'home' %}">
-                                        <img width="400" height="79" src="{% static 'media/logo.png'%}"
+                                        <img width="400" height="79" src="{% static 'img/logo.jpg' %}"
                                             alt="Ruper – Furniture HTML Theme" />
                                     </a>
                                 </div>
@@ -97,8 +97,7 @@
                                 <div class="col-lg-8 header-left">
                                     <div class="site-logo">
                                         <a href="{% url 'home' %}">
-                                            <img width="400" height="79" src="{% static 'media/logo.png'%}"
-                                                alt="Ruper – Furniture HTML Theme" />
+                                            <span>UMUT Driving</span>
                                         </a>
                                     </div>
 
@@ -106,101 +105,9 @@
                                         <nav id="main-navigation">
                                             <ul id="menu-main-menu" class="menu">
                                                 <li
-                                                    class="level-0 menu-item menu-item-has-children mega-menu current-menu-item">
+                                                    class="level-0 menu-item mega-menu current-menu-item">
                                                     <a href="{% url 'home' %}"><span class="menu-item-text">Главная</span></a>
-                                                    <div class="sub-menu">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <div class="menu-section">
-                                                                    <h2 class="sub-menu-title">Furniture 1</h2>
-                                                                    <ul class="menu-list">
-                                                                        <li>
-                                                                            <a href="{% url 'home' %}"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Categories</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index2.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Clean</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="{% url 'home' %}"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Collection</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index4.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Grid</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index5.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Minimal</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index6.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Modern</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index7.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Stylish</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index8.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Unique</span></a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="menu-section">
-                                                                    <h2 class="sub-menu-title">Furniture 2</h2>
-                                                                    <ul class="menu-list">
-                                                                        <li>
-                                                                            <a href="index9.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Split</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index10.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Gothic</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index11.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Luxury</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index12.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Scandinavian</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index13.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Mid-Century</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index14.html"><span
-                                                                                    class="menu-item-text">Home
-                                                                                    Retro</span></a>
-                                                                        </li>
-                                                                        <li>
-                                                                            <a href="index15.html"><span
-                                                                                    class="menu-item-text">Home Color
-                                                                                    Block</span></a>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                    
                                                 </li>
                                                 <li class="level-0 menu-item">
                                                     <a href="{% url 'contact' %}"><span
