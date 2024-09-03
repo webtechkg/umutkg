@@ -38,12 +38,12 @@
         <!-- Block Product Categories -->
         <div class="block block-product-cats slider">
             <div class="block-widget-wrap">
-                <div class="block-title">
+                <div class="block-title mt-5">
                     <h2>Все тесты</h2>
                 </div>
                 <div class="block-content-tests">
                     {% for ticket in tickets %}
-                    <li><a href="{% url 'start_test' ticket_id=ticket.id %}">{{ ticket.number }}</a></li>
+                    <a href="{% url 'start_test' ticket_id=ticket.id %}"><li>{{ ticket.number }}</li></a>
                     {% endfor %}
                 </div>
             </div>

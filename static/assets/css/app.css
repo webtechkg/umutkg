@@ -86,7 +86,7 @@ a (active)  : #000000
 /*------------------------------------------------------------------
 [Typography]
 
-Body   : 15px "Barlow Semi Condensed";
+Body   : 15px ""Jost", sans-serif";
 Other  : "EB Garamond";
 -------------------------------------------------------------------*/
 
@@ -95,7 +95,7 @@ Other  : "EB Garamond";
 1. General
 ====================================================================*/
 html {
-  font-family: sans-serif;
+  font-family: "Jost", sans-serif;
   line-height: 1.15;
   -webkit-text-size-adjust: 100%;
   -ms-text-size-adjust: 100%;
@@ -105,7 +105,7 @@ html {
 }
 body {
   margin: 0;
-  font-family: Barlow Semi Condensed;
+  font-family: "Jost", sans-serif;
   font-size: 1rem;
   font-weight: 400;
   line-height: 1.8;
@@ -126,7 +126,7 @@ h4,
 h5, 
 h6 {
   margin-bottom: .5rem;
-  font-family: Barlow Semi Condensed;
+  font-family: "Jost", sans-serif;
   font-weight: 400;
   line-height: 1.2;
   color: #000;
@@ -1567,7 +1567,7 @@ ul.slick-dots li.slick-active button {
 .site-header.header-v1 .header-desktop,
 .site-header.header-v3 .header-desktop {
   padding: 30px 0;
-  background-color: #253993;
+  background-color: #33aebd;
 }
 .site-header.header-v2 .header-desktop {
   padding: 20px 0;
@@ -1757,7 +1757,7 @@ ul.slick-dots li.slick-active button {
 .site-navigation ul > li.level-0.current-menu-item > a, 
 .site-navigation ul > li.level-0.current_page_item > a, 
 .site-navigation ul > li.level-0:hover > a {
-  color: #000;
+  color: #fff;
 }
 .color-white .site-navigation ul > li.level-0.current-menu-ancestor > a, 
 .color-white .site-navigation ul > li.level-0.current-menu-item > a, 
@@ -1779,11 +1779,11 @@ ul.slick-dots li.slick-active button {
 .site-navigation ul > li.level-0 > a {
   position: relative;
   text-transform: capitalize;
-  font-family: Barlow Semi Condensed;
+  font-family: "Jost", sans-serif;
   font-weight: 500;
   font-size: 14px;
   background-color: transparent;
-  color: #000;
+  color: #fff;
   display: table;
   white-space: nowrap;
   text-transform: uppercase;
@@ -1815,7 +1815,7 @@ ul.slick-dots li.slick-active button {
   height: 1px;
   -webkit-transition: all .3s ease;
   transition: all .3s ease;
-  background: #000;
+  background: #fff;
   opacity: 0;
   visibility: hidden;
 }
@@ -5427,7 +5427,7 @@ ul.slick-dots li.slick-active button {
   margin-bottom: 25px;
 }
 .block-testimonial.layout-2 .testimonial-content .item .testimonial-excerpt {
-  font-family: Barlow Semi Condensed;
+  font-family: "Jost", sans-serif;
   font-size: 16px;
   font-style: normal;
   line-height: 1.8;
