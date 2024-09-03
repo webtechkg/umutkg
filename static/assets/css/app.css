@@ -1485,6 +1485,7 @@ ul.slick-dots li.slick-active button {
 .site-header.header-v1 .header-desktop,
 .site-header.header-v3 .header-desktop {
   padding: 30px 0;
+  background-color: #253993;
 }
 .site-header.header-v2 .header-desktop {
   padding: 20px 0;
@@ -3648,11 +3649,9 @@ ul.slick-dots li.slick-active button {
   margin: 0 -30px;
 }
 .block-banners.layout-4 .row > div {
-  padding: 0 30px;
+  padding: 0 100px;
 }
-.block-banners.layout-4 .row > div:nth-child(2) .block-widget-banner {
-  margin-top: 210px;
-}
+
 .block-banners.layout-5 .row {
   margin: 0 -40px;
 }
