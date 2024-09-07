@@ -1,0 +1,60 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      target: base
+    container_name: umut
+    restart: always
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/usr/src/app
+      - static_volume:/umut/staticfiles
+      - media_volume:/umut/media
+    depends_on:
+      - db
+    networks:
+      - umut_network
+    environment:
+      - DATABASE_NAME=${DATABASE_NAME}
+      - DATABASE_USER=${DATABASE_USER}
+      - DATABASE_PASSWORD=${DATABASE_PASSWORD}
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+
+  db:
+    image: postgres:latest
+    container_name: umut-db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME}
+      - POSTGRES_USER=${DATABASE_USER}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    networks:
+      - umut_network
+
+  nginx:
+    image: nginx:latest
+    container_name: umut-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/umut.conf:/etc/nginx/conf.d/umut.conf
+      - static_volume:/umut/staticfiles
+      - media_volume:/umut/media
+    depends_on:
+      - app
+    networks:
+      - umut_network
+
+networks:
+  umut_network:
+
+volumes:
+  postgres_data:
+  static_volume:
+  media_volume:
