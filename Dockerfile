@@ -16,7 +16,7 @@ RUN pip install -r /umut/requirements.txt
 
 COPY . .
 
-EXPOSE 8000
+EXPOSE 8001
 
 COPY . /umut
 
