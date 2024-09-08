@@ -29,7 +29,8 @@ services:
     ports:
       - "8081:80"
     volumes:
-      - ./nginx/umut.conf:/etc/nginx/conf.d/umut.conf
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/umut.conf:/etc/nginx/conf.d/default.conf
       - static_volume:/umut/staticfiles
       - media_volume:/umut/media
     depends_on:
