@@ -14,7 +14,7 @@ services:
     depends_on:
       - db
     networks:
-      - oku_network
+      - umut_network
     environment:
       - DATABASE_NAME=${DATABASE_NAME}
       - DATABASE_USER=${DATABASE_USER}
@@ -35,7 +35,7 @@ services:
     depends_on:
       - app
     networks:
-      - oku_network
+      - umut_network
 
   db:
     image: postgres:latest
@@ -47,10 +47,10 @@ services:
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     networks:
-      - oku_network
+      - umut_network
 
 networks:
-  oku_network:
+  umut_network:
     external: true
 
 volumes:
