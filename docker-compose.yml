@@ -7,8 +7,6 @@ services:
       target: base
     container_name: umut
     restart: always
-    ports:
-      - "8000:8001"
     volumes:
       - .:/usr/src/app
       - static_volume:/umut/staticfiles
@@ -16,7 +14,7 @@ services:
     depends_on:
       - db
     networks:
-      - umut_network
+      - oku_network
     environment:
       - DATABASE_NAME=${DATABASE_NAME}
       - DATABASE_USER=${DATABASE_USER}
@@ -34,25 +32,11 @@ services:
       - POSTGRES_USER=${DATABASE_USER}
       - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
     networks:
-      - umut_network
-
-  nginx:
-    image: nginx:latest
-    container_name: umut-nginx
-    ports:
-      - "80:80"
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/umut.conf:/etc/nginx/conf.d/umut.conf
-      - static_volume:/umut/staticfiles
-      - media_volume:/umut/media
-    depends_on:
-      - app
-    networks:
-      - umut_network
+      - oku_network
 
 networks:
-  umut_network:
+  oku_network:
+    external: true
 
 volumes:
   postgres_data:
