@@ -176,3 +176,23 @@ def start_random_test_view(request):
     else:
         random_theme = random.choice(themes)
         return redirect("start_test_theme", theme_id=random_theme.id)
+
+
+def toggle_language(request):
+    if request.method == "POST":
+        language = request.POST.get("language", "ru")
+        current_question_index = int(request.POST.get("current_question", 0)) - 1
+
+        questions = request.session.get("questions", [])
+        question_id = questions[current_question_index]
+        question, answers = get_question_with_answers(question_id)
+
+        question_text = question.text_ru if language == "ru" else question.text_kg
+        answers_data = [{"id": answer.id, "text": answer.text_ru if language == "ru" else answer.text_kg} for answer in answers]
+
+        return JsonResponse({
+            "question_text": question_text,
+            "answers": answers_data,
+        })
+
+    return JsonResponse({"error": "Invalid request"}, status=400)

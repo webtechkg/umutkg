@@ -11,4 +11,5 @@ urlpatterns = [
     path('results/', views.results_view, name='results'),
     path('ajax/answer/', views.ajax_answer, name='ajax_answer'),
     path('ajax/navigate/', views.navigate_question, name='navigate_question'),
+    path('toggle-language/', views.toggle_language, name='toggle_language'),
 ]

@@ -96,19 +96,21 @@
                 <div class="newsletter-wrap" style="margin: 20px;">
                     <div class="sub-title">Вопрос <span id="current-question">
                             {{ current_question }}</span> из {{ total_questions }}</div>
-                    <div class="title">{{ question.text_ru }}</div>
+                    <div class="title" id="question-text">{{ question.text_ru }}</div>
                     <form id="answer-form">
                         {% csrf_token %}
-                        {% for answer in answers %}
-                        <div>
-                            <label for="answer_{{ answer.id }}"><input style="margin-right: 7px;" type="radio"
-                                    id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}">
-                                {{answer.text_ru}}</label>
+                        <div id="answer-options">
+                            {% for answer in answers %}
+                            <div>
+                                <label for="answer_{{ answer.id }}"><input style="margin-right: 7px;" type="radio"
+                                        id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}">
+                                    {{answer.text_ru}}</label>
+                            </div>
+                            {% endfor %}
                         </div>
-                        {% endfor %}
                         <button class="answer-button" type="button" id="answer-button"
-                            onclick="submitAnswer()">ответить</button>
-                        <button></button>
+                                onclick="submitAnswer()">ответить</button>
+                        <button type="button" id="language-button" onclick="toggleLanguage()">Сменить язык</button>
                     </form>
                     <div id="result"></div>
                     <div class="question-nav">
@@ -126,6 +128,49 @@
 </section>
 
 <script>
+    let currentLanguage = "ru";
+
+    function toggleLanguage() {
+        currentLanguage = currentLanguage === "ru" ? "kg" : "ru";
+        updateQuestionLanguage();
+    }
+
+    function updateQuestionLanguage() {
+        let current_question = $('#current-question').text();
+
+        $.ajax({
+            url: "{% url 'toggle_language' %}",
+            method: "POST",
+            data: {
+                'csrfmiddlewaretoken': "{{ csrf_token }}",
+                'current_question': current_question,
+                'language': currentLanguage
+            },
+            success: function(data) {
+                // Обновляем текст вопроса
+                $("#question-text").text(data.question_text);
+                
+                // Обновляем ответы (только ответы, не трогая кнопки)
+                let answersHtml = "";
+                data.answers.forEach(function(answer) {
+                    answersHtml += `
+                        <div>
+                            <label for="answer_${answer.id}">
+                                <input type="radio" id="answer_${answer.id}" name="answer" value="${answer.id}" style="margin-right: 7px;">
+                                ${answer.text}
+                            </label>
+                        </div>
+                    `;
+                });
+                $("#answer-options").html(answersHtml);  // Обновляем только ответы
+            },
+            error: function(xhr, status, error) {
+                console.error(xhr);
+            }
+        });
+    }
+
+
     function submitAnswer() {
         let answer_id = $('input[name="answer"]:checked').val();
         if (!answer_id) {
@@ -140,12 +185,10 @@
                 'answer_id': answer_id
             },
             success: function (data) {
-                $("#answer-button").hide();
                 if (data.finished) {
-                    // Показываем обновленные результаты
+                    $("#answer-button").hide();
                     $("#result").html(`Тест завершен. Правильных ответов: ${data.correct_answers} из ${data.total_questions}`);
-
-                    // Обновляем статус вопросов
+                    
                     data.question_status.forEach(function (status, index) {
                         let questionNav = $("#question-" + index);
                         questionNav.removeClass("correct incorrect");
@@ -155,7 +198,6 @@
                             questionNav.addClass("incorrect");
                         }
                     });
-
                 } else {
                     updateQuestion(data);
                 }
@@ -169,6 +211,7 @@
             }
         });
     }
+
 
 
     function navigateToQuestion(index) {
@@ -195,37 +238,29 @@
     function updateQuestion(data) {
         if (data.finished) {
             $("#answer-button").hide();
-
         } else {
             $("#current-question").text(data.current_question); // Обновляем номер вопроса
             $("#question-text").text(data.next_question_text);  // Обновляем текст вопроса
-
-            // Обновляем фото с добавлением временной метки
+            
             let photoUrl = data.next_question_photo ? data.next_question_photo + '?v=' + new Date().getTime() : "{% static 'img/no_picture.png' %}";
             $(".banner-image img").attr("src", photoUrl); // Изменяем URL изображения
 
-            // Очищаем старые ответы и добавляем новые
-            $("#answer-form").empty();
+            let answersHtml = "";
             data.next_answers.forEach(function (answer) {
-                $("#answer-form").append(
-                    `<div>
-            <label for="answer_${answer.id}">
-                <input type="radio" id="answer_${answer.id}" name="answer" value="${answer.id}" style="margin-right: 7px;">
-                ${answer.text_ru}
-            </label>
-        </div>`
-                );
+                answersHtml += `
+                    <div>
+                        <label for="answer_${answer.id}">
+                            <input type="radio" id="answer_${answer.id}" name="answer" value="${answer.id}" style="margin-right: 7px;">
+                            ${answer.text_ru}
+                        </label>
+                    </div>
+                `;
             });
+            $("#answer-options").html(answersHtml);  // Обновляем только ответы
         }
-
-
-        // Добавляем кнопки для ответа
-        $("#answer-form").append('<button type="button" id="answer-button" onclick="submitAnswer()">ответить</button>');
-
-        // Обновляем результаты
+        
         $("#result").text("Правильно: " + data.correct_answers + ", Неправильно: " + data.incorrect_answers);
 
-        // Обновляем навигацию по вопросам
         data.question_status.forEach(function (status, index) {
             let questionNav = $("#question-" + index);
             questionNav.removeClass("correct incorrect");
