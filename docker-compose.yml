@@ -55,6 +55,7 @@ networks:
     external: true
 
 volumes:
-  postgres_data:
+  umutkg_postgres_data:
+    external: true
   static_volume:
   media_volume:
