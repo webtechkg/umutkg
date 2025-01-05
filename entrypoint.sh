@@ -13,4 +13,4 @@ python manage.py migrate
 python manage.py collectstatic --noinput
 
 # Start the application using gunicorn
-gunicorn umut.wsgi:application --bind 0.0.0.0:8000
+gunicorn config.wsgi:application --bind 0.0.0.0:8000
