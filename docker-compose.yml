@@ -19,6 +19,8 @@ services:
       - DATABASE_PASSWORD=${DATABASE_PASSWORD}
       - DATABASE_HOST=${DATABASE_HOST}
       - DATABASE_PORT=${DATABASE_PORT}
+    ports:
+      - "8000:8000"
 
   nginx:
     image: nginx:latest
