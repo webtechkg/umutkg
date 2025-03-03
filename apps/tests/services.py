@@ -4,13 +4,24 @@ import random
 
 
 def start_test(ticket=None, theme=None):
+    """
+    Получает вопросы для теста по билету или теме.
+    
+    Args:
+        ticket: объект Ticket для фильтрации вопросов по билету
+        theme: объект Theme для фильтрации вопросов по теме
+        
+    Returns:
+        список вопросов
+    """
     if ticket:
         questions = list(Question.objects.filter(ticket=ticket))
     elif theme:
         questions = list(Question.objects.filter(theme=theme))
     else:
-        questions = list(Question.objects.all())
+        questions = list(Question.objects.all()[:20])
         random.shuffle(questions)
+    
     return questions
 
 

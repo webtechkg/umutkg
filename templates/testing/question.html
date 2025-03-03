@@ -4,30 +4,11 @@
 {% load custom_tags %}
 {% block title %}Вопрос № {{ current_question }} {% endblock %}
 {% block link %}
-
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 {% endblock %}
 {% block main %}
 
 <style>
-    .question-nav {
-        margin-top: 20px;
-    }
-
-    .question-nav a {
-        margin: 0 5px;
-        text-decoration: none;
-    }
-
-    .question-nav .correct {
-        color: green;
-    }
-
-    .question-nav .incorrect {
-        color: red;
-    }
-
-
     .question-nav {
         margin-top: 20px;
     }
@@ -65,13 +46,48 @@
         /* Центрирование изображения по горизонтали */
         align-items: center;
         /* Центрирование изображения по горизонтали */
-
+    }
+    
+    .ticket-info {
+        margin-bottom: 20px;
+        text-align: center;
+        background-color: #f8f9fa;
+        padding: 10px;
+        border-radius: 5px;
+    }
+    
+    .ticket-info h4 {
+        margin: 0;
+        color: #495057;
+    }
+    
+    .error-message {
+        text-align: center;
+        padding: 20px;
+        background-color: #f8d7da;
+        color: #721c24;
+        border-radius: 5px;
+        margin: 20px 0;
+    }
+    
+    .error-message a {
+        color: #721c24;
+        text-decoration: underline;
     }
 </style>
 
-
 <section class="section background-2 no-space m-b-70" style="padding-top: 70px;">
     <div class="container pb-2 mt-5">
+        {% if question %}
+        <div class="ticket-info">
+            {% if question.ticket %}
+            <h4>Билет №{{ question.ticket.number }}</h4>
+            {% endif %}
+            {% if question.theme %}
+            <h4>Тема: {{ question.theme.text }}</h4>
+            {% endif %}
+        </div>
+        
         <div class="col mx-auto">
             <!-- Block Banners -->
             <div class="block block-banners banners-effect">
@@ -123,7 +139,11 @@
                 </div>
             </div>
         </div>
-    </div>
+        {% else %}
+        <div class="error-message">
+            <p>Вопросы не найдены. <a href="{% url 'list_themes_and_tickets' %}">Вернуться к списку билетов</a></p>
+        </div>
+        {% endif %}
     </div>
 </section>
 
@@ -187,7 +207,9 @@
             success: function (data) {
                 if (data.finished) {
                     $("#answer-button").hide();
-                    $("#result").html(`Тест завершен. Правильных ответов: ${data.correct_answers} из ${data.total_questions}`);
+                    $("#language-button").hide();
+                    $("#result").html(`<strong>Тест завершен.</strong> Правильных ответов: ${data.correct_answers} из ${data.total_questions}
+                        <br/><a href="{% url 'list_themes_and_tickets' %}" class="btn btn-primary mt-3">Вернуться к билетам</a>`);
                     
                     data.question_status.forEach(function (status, index) {
                         let questionNav = $("#question-" + index);
@@ -212,8 +234,6 @@
         });
     }
 
-
-
     function navigateToQuestion(index) {
         $.ajax({
             url: "{% url 'navigate_question' %}",
@@ -224,6 +244,8 @@
             },
             success: function (data) {
                 updateQuestion(data);
+                
+                currentLanguage = "ru";
             },
             error: function (xhr, status, error) {
                 if (xhr.responseJSON && xhr.responseJSON.error) {
@@ -238,9 +260,17 @@
     function updateQuestion(data) {
         if (data.finished) {
             $("#answer-button").hide();
+            $("#language-button").hide();
         } else {
-            $("#current-question").text(data.current_question); // Обновляем номер вопроса
-            $("#question-text").text(data.next_question_text);  // Обновляем текст вопроса
+            $("#current-question").text(data.current_question);
+            $("#question-text").text(data.next_question_text);
+
+            if (data.ticket_number) {
+                $(".ticket-info h4").text(`Билет №${data.ticket_number}`);
+            }
+            if (data.theme_text) {
+                $(".ticket-info h4").text(`Тема: ${data.theme_text}`);
+            }
             
             let photoUrl = data.next_question_photo ? data.next_question_photo + '?v=' + new Date().getTime() : "{% static 'img/no_picture.png' %}";
             $(".banner-image img").attr("src", photoUrl); // Изменяем URL изображения
@@ -259,7 +289,8 @@
             $("#answer-options").html(answersHtml);  // Обновляем только ответы
         }
         
-        $("#result").text("Правильно: " + data.correct_answers + ", Неправильно: " + data.incorrect_answers);
+        $("#result").html(`<div class="text-center mt-2">Правильно: <span class="text-success">${data.correct_answers}</span>, 
+            Неправильно: <span class="text-danger">${data.incorrect_answers}</span></div>`);
 
         data.question_status.forEach(function (status, index) {
             let questionNav = $("#question-" + index);
@@ -271,7 +302,6 @@
             }
         });
     }
-
 </script>
 
 {% endblock %}

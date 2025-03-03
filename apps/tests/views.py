@@ -17,6 +17,12 @@ def start_test_view(request, ticket_id=None, theme_id=None):
     else:
         questions = start_test()
 
+    if len(questions) == 0:
+        return render(request, "testing/tests.html", 
+                     {"themes": Theme.objects.all(), 
+                      "tickets": Ticket.objects.all(),
+                      "error": "К сожалению, для этого билета/темы нет вопросов."})
+
     request.session["questions"] = [question.id for question in questions]
     request.session["current_question"] = 0
     request.session["correct_answers"] = 0
@@ -54,18 +60,30 @@ def question_view(request):
 def ajax_answer(request):
     if request.method == "POST":
         questions = request.session.get("questions", [])
+        if not questions:
+            return JsonResponse({"error": "Вопросы не найдены"}, status=400)
+            
         current_question = request.session.get("current_question", 0)
         answered_questions = request.session.get("answered_questions", [])
 
         if current_question in answered_questions:
-            return JsonResponse({"error": "Question already answered"}, status=400)
+            return JsonResponse({"error": "Вопрос уже отвечен"}, status=400)
 
         if current_question >= len(questions):
-            return JsonResponse({"finished": True})
+            return JsonResponse({
+                "finished": True,
+                "correct_answers": request.session["correct_answers"],
+                "incorrect_answers": request.session["incorrect_answers"],
+                "total_questions": len(questions)
+            })
 
         question_id = questions[current_question]
         answer_id = request.POST.get("answer_id", "")
-        is_correct, correct_answer = process_answer(question_id, answer_id)
+        
+        try:
+            is_correct, correct_answer = process_answer(question_id, answer_id)
+        except Exception as e:
+            return JsonResponse({"error": f"Ошибка обработки ответа: {str(e)}"}, status=400)
 
         # Обновляем статус вопроса
         if is_correct:
@@ -88,11 +106,14 @@ def ajax_answer(request):
                 "correct_answers": request.session["correct_answers"],
                 "incorrect_answers": request.session["incorrect_answers"],
                 "total_questions": len(questions),
-                "question_status": request.session["question_status"],  # Добавляем статусы вопросов для обновления
+                "question_status": request.session["question_status"],
             })
 
         next_question_id = questions[next_question_index]
-        next_question, next_answers = get_question_with_answers(next_question_id)
+        try:
+            next_question, next_answers = get_question_with_answers(next_question_id)
+        except Exception as e:
+            return JsonResponse({"error": f"Ошибка получения следующего вопроса: {str(e)}"}, status=400)
 
         next_question_photo = next_question.photo.url if next_question.photo else None
         data = {
@@ -104,14 +125,14 @@ def ajax_answer(request):
             "finished": False,
             "next_question_text": next_question.text_ru,
             "next_question_id": next_question.id,
-            "next_question_photo": next_question_photo,  # Передаем URL фотографии
+            "next_question_photo": next_question_photo,
             "next_answers": list(next_answers.values("id", "text_ru")),
             "correct_answer": correct_answer,
-            "question_status": request.session["question_status"],  # Добавляем статусы вопросов для обновления
+            "question_status": request.session["question_status"],
         }
 
         return JsonResponse(data)
-    return JsonResponse({"error": "Invalid request"}, status=400)
+    return JsonResponse({"error": "Неверный запрос"}, status=400)
 
 def navigate_question(request):
     if request.method == "POST":
