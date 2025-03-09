@@ -96,9 +96,10 @@
                         <div class="banner-wrapper banners">
                             <div class="banner-image">
                                 <a href="#">
+                                    {{question.get_photo.url}}
                                     <img width="961" height="50%"
-                                        src="{% if question.photo %}{{question.photo.url}}{% else %}{% static 'img\no_picture.png' %}{% endif %}"
-                                        alt="Banner Image">
+                                    src="{% if question.get_photo %}{{ question.get_photo }}{% else %}{% static 'img/no_picture.png' %}{% endif %}"
+                                    alt="Banner Image">
                                 </a>
                             </div>
                         </div>

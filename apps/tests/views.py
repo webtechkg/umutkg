@@ -62,7 +62,7 @@ def ajax_answer(request):
         questions = request.session.get("questions", [])
         if not questions:
             return JsonResponse({"error": "Вопросы не найдены"}, status=400)
-            
+
         current_question = request.session.get("current_question", 0)
         answered_questions = request.session.get("answered_questions", [])
 
@@ -79,7 +79,7 @@ def ajax_answer(request):
 
         question_id = questions[current_question]
         answer_id = request.POST.get("answer_id", "")
-        
+
         try:
             is_correct, correct_answer = process_answer(question_id, answer_id)
         except Exception as e:
@@ -100,7 +100,6 @@ def ajax_answer(request):
 
         # Проверка на завершение теста
         if next_question_index >= len(questions):
-            # Возвращаем итоговые данные после завершения теста
             return JsonResponse({
                 "finished": True,
                 "correct_answers": request.session["correct_answers"],
@@ -115,7 +114,10 @@ def ajax_answer(request):
         except Exception as e:
             return JsonResponse({"error": f"Ошибка получения следующего вопроса: {str(e)}"}, status=400)
 
-        next_question_photo = next_question.photo.url if next_question.photo else None
+        # Используем photo_url, если photo отсутствует
+        
+        next_question_photo = next_question.photo.url if next_question.photo else next_question.photo_url
+
         data = {
             "is_correct": is_correct,
             "correct_answers": request.session["correct_answers"],
@@ -125,7 +127,7 @@ def ajax_answer(request):
             "finished": False,
             "next_question_text": next_question.text_ru,
             "next_question_id": next_question.id,
-            "next_question_photo": next_question_photo,
+            "next_question_photo": next_question_photo,  # Передаём фото
             "next_answers": list(next_answers.values("id", "text_ru")),
             "correct_answer": correct_answer,
             "question_status": request.session["question_status"],
@@ -133,6 +135,8 @@ def ajax_answer(request):
 
         return JsonResponse(data)
     return JsonResponse({"error": "Неверный запрос"}, status=400)
+
+
 
 def navigate_question(request):
     if request.method == "POST":
@@ -147,7 +151,7 @@ def navigate_question(request):
         question_status = request.session.get("question_status", [])
         indexed_status = list(enumerate(question_status))
 
-        next_question_photo = question.photo.url if question.photo else None
+        next_question_photo = question.photo.url if question.photo else question.photo_url
         data = {
             "current_question": question_index + 1,
             "next_question_text": question.text_ru,
@@ -189,14 +193,14 @@ def list_themes_and_tickets_view(request):
 
 
 def start_random_test_view(request):
-    themes = list(Theme.objects.all())
     tickets = list(Ticket.objects.all())
-    if random.choice([True, False]):
-        random_ticket = random.choice(tickets)
-        return redirect("start_test", ticket_id=random_ticket.id)
-    else:
-        random_theme = random.choice(themes)
-        return redirect("start_test_theme", theme_id=random_theme.id)
+    # themes = list(Theme.objects.all())
+    # if random.choice([True, False]):
+    random_ticket = random.choice(tickets)
+    return redirect("start_test", ticket_id=random_ticket.id)
+    # else:
+    #     random_theme = random.choice(themes)
+    #     return redirect("start_test_theme", theme_id=random_theme.id)
 
 
 def toggle_language(request):
