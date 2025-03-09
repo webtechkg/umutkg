@@ -119,8 +119,9 @@
                         <div id="answer-options">
                             {% for answer in answers %}
                             <div>
-                                <label for="answer_{{ answer.id }}"><input style="margin-right: 7px;" type="radio"
-                                        id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}">
+                                <label for="answer_{{ answer.id }}"><input 
+                                    style="  border: 1px solid gray; border-radius: 5px; padding: 2px 7px;" type="radio"
+                                    id="answer_{{ answer.id }}" name="answer" value="{{ answer.id }}">
                                     {{answer.text_ru}}</label>
                             </div>
                             {% endfor %}

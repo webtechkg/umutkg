@@ -1199,7 +1199,7 @@
     margin-bottom: 15px;
   }
   .block-newsletter .newsletter-wrap {
-    text-align: center;
+    /* text-align: center; */
   }
   .block-newsletter .newsletter-wrap > div {
     padding: 0 0px;
