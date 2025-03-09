@@ -1202,7 +1202,7 @@
     text-align: center;
   }
   .block-newsletter .newsletter-wrap > div {
-    padding: 0 15px;
+    padding: 0 0px;
   }
   .block-newsletter .title {
     font-size: 25px;
@@ -1450,6 +1450,9 @@
 }
 
 @media (max-width: 480px) {
+  container{
+    padding: 0;
+  } 
   body.home.title-2 .section .block-title h2 {
     font-size: 30px;
   }

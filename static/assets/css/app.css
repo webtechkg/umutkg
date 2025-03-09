@@ -3198,14 +3198,16 @@ ul.slick-dots li.slick-active button {
 4. Breadcrumbs
 =========================================================================*/
 .site-main .page-title {
-  background-image: url(../../media/site-header.jpg);
+  background-image: url(https://region15.ru/wp-content/uploads/2018/09/doroga3.jpg);
   padding: 145px 15px 0 15px;
   margin: 0 0 70px;
   font-size: 20px;
   padding-bottom: 50px;
-  background-position: top;
+  background-position: center;
+  background-size: cover;
   position: relative;
   text-align: center;
+  background-repeat: no-repeat;
 }
 .site-main .page-title .content-title-heading {
   display: inline-flex;
