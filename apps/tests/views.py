@@ -1,10 +1,11 @@
 # testing/views.py
 import random
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Ticket, Theme
+from .models import Ticket, Theme, Question, Answer
 from .services import start_test, process_answer, get_question_with_answers
 from django.http import JsonResponse
 from django.urls import reverse
+import json
 
 
 def start_test_view(request, ticket_id=None, theme_id=None):
@@ -221,3 +222,43 @@ def toggle_language(request):
         })
 
     return JsonResponse({"error": "Invalid request"}, status=400)
+
+
+
+def export_questions_to_json():
+    data = {}
+    
+    for ticket in Ticket.objects.all():
+        ticket_key = f"test_{ticket.number}"
+        data[ticket_key] = []
+        
+        for question in Question.objects.filter(ticket=ticket):
+            question_data = {
+                "question_number": question.number,
+                "question_text_ru": question.text_ru,
+                "question_text_kg": question.text_kg,
+                "image": question.get_photo(),
+                "answers_ru": [],
+                "answers_kg": [],
+            }
+            
+            for answer in Answer.objects.filter(question=question):
+                question_data["answers_ru"].append({
+                    "text": answer.text_ru,
+                    "is_correct": answer.is_correct
+                })
+                question_data["answers_kg"].append({
+                    "text": answer.text_kg,
+                    "is_correct": answer.is_correct
+                })
+                
+            data[ticket_key].append(question_data)
+    
+    return json.dumps(data, ensure_ascii=False, indent=4)
+
+# Сохранение в файл или использование в API
+json_data = export_questions_to_json()
+with open("questions.json", "w", encoding="utf-8") as file:
+    file.write(json_data)
+
+print("Данные успешно экспортированы в JSON!")
