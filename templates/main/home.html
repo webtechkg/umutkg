@@ -156,44 +156,7 @@
 						</div>
 					</div>
 				</section>
-				<section class="section section-padding top-border p-t-70 m-b-70">
-					<div class="section-container">
-						<!-- Block Product Categories -->
-						<div class="block block-product-cats slider">
-							<div class="block-widget-wrap">
-								<div class="block-title">
-									<h2>Темы</h2>
-								</div>
-								<div class="block-content">
-									<div class="product-cats-list slick-wrap">
-										<div class="slick-sliders content-category" data-dots="0" data-slidestoscroll="true"
-											data-nav="1" data-columns4="2" data-columns3="3" data-columns2="4" data-columns1="5"
-											data-columns1440="5" data-columns="5">
-											{% for theme in themes %}
-											<div class="item item-product-cat slick-slide">
-												<div class="item-product-cat-content">
-													<a href="{% url 'start_test_theme' theme_id=theme.id %}">
-														<div class="item-image">
-															<img width="258" height="258" src="{% static 'media/product/cat-1.jpg'%}"
-																alt="bed-bath">
-														</div>
-													</a>
-													<div class="product-cat-content-info">
-														<h2 class="item-title">
-															<a href="{% url 'start_test_theme' theme_id=theme.id %}">
-																{{ theme.text}}</a>
-														</h2>
-													</div>
-												</div>
-											</div>
-											{% endfor %}
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
+
 
 			</div><!-- #content -->
 		</div><!-- #primary -->
