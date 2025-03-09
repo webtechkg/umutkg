@@ -182,6 +182,12 @@ label {
   display: inline-block;
   margin-bottom: .5rem;
 }
+
+#answer-options > label{
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 2px 7px;
+}
 .table, 
 table {
   width: 100%;
