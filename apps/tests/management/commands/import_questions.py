@@ -3,6 +3,12 @@ import os
 from django.core.management.base import BaseCommand
 from apps.tests.models import Ticket, Question, Answer  # Импорт моделей
 
+from django.apps import apps
+
+for model in apps.get_models():
+    model.objects.all().delete()
+    print(f"Все записи из {model.__name__} удалены!")
+
 class Command(BaseCommand):
     help = "Импортирует вопросы из JSON в базу данных"
 
