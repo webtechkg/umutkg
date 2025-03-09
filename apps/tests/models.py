@@ -33,27 +33,34 @@ class Theme(models.Model):
 
 
 class Question(models.Model):
-
     number = models.PositiveIntegerField("Номер вопроса")
     text_ru = models.TextField("Вопрос на русском")
     text_kg = models.TextField("Вопрос на кыргызском", blank=True, null=True)
     photo = models.ImageField(
-        "Фото к вопросу", upload_to='tests/test', blank=True, null=True)
+        "Фото к вопросу", upload_to='tests/test', blank=True, null=True
+    )
+    photo_url = models.TextField("Фото к вопросу (URL)", blank=True, null=True)
     theme = models.ForeignKey(
-        Theme, on_delete=models.CASCADE, verbose_name="Тема вопроса")
+        Theme, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Тема вопроса"
+    )
     ticket = models.ForeignKey(
-        Ticket, on_delete=models.CASCADE, verbose_name="Билет")
+        Ticket, on_delete=models.CASCADE, verbose_name="Билет"
+    )
 
     class Meta:
-        verbose_name = ("Вопрос")
-        verbose_name_plural = ("Вопросы")
+        verbose_name = "Вопрос"
+        verbose_name_plural = "Вопросы"
 
     def __str__(self):
         return self.text_ru
 
-    def get_absolute_url(self):
-        return reverse("_detail", kwargs={"pk": self.pk})
-
+    def get_photo(self):
+        """Возвращает либо локальное фото, либо URL"""
+        if self.photo:
+            return self.photo.url  # Используем локальное изображение
+        else:
+            return self.photo_url  # Используем внешний URL
+        
 
 class Answer(models.Model):
     question = models.ForeignKey(
