@@ -8,7 +8,8 @@ WORKDIR /umut
 RUN apt-get update && apt-get install -y \
     netcat-traditional \
     binutils \
-    libproj-dev
+    libproj-dev \
+    gunicorn
 
 COPY requirements.txt /umut/requirements.txt
 RUN pip install --upgrade pip
@@ -22,4 +23,4 @@ COPY . /umut
 
 RUN chmod +x /umut/entrypoint.sh
 
-CMD ["/umut/entrypoint.sh"]
+ENTRYPOINT ["/umut/entrypoint.sh"]
